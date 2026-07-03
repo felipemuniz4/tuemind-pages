@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TubeMind — Login TikTok</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:520px;margin:60px auto;padding:0 20px;text-align:center;color:#1a1a1a}
+  .box{background:#f4f4f5;border-radius:14px;padding:20px;margin-top:24px;word-break:break-all;font-family:ui-monospace,monospace;font-size:14px;border:1px solid #ddd}
+  button{margin-top:16px;padding:10px 18px;border-radius:10px;border:none;background:#111;color:#fff;font-size:14px;cursor:pointer}
+  .ok{color:#0a7d2c;font-weight:600}
+  .err{color:#c0392b}
+</style>
+</head>
+<body>
+<h1>Autorização concluída</h1>
+<p id="msg">Copie o código abaixo e cole de volta no terminal do TubeMind.</p>
+<div class="box" id="code">(lendo...)</div>
+<button onclick="copyIt()">Copiar código</button>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const err = params.get("error");
+  const el = document.getElementById("code");
+  const msg = document.getElementById("msg");
+  if (err) {
+    el.textContent = err + (params.get("error_description") ? ": " + params.get("error_description") : "");
+    el.className = "err";
+    msg.textContent = "A autorização falhou.";
+  } else if (code) {
+    el.textContent = code;
+  } else {
+    el.textContent = "(nenhum código encontrado na URL)";
+    msg.textContent = "Algo não veio certo — confira se a URL de redirecionamento cadastrada no app bate com esta página.";
+  }
+  function copyIt(){
+    navigator.clipboard.writeText(el.textContent);
+    msg.innerHTML = '<span class="ok">Copiado! Volta pro terminal e cola.</span>';
+  }
+</script>
+</body>
+</html>
